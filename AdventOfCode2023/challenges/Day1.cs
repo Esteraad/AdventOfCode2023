@@ -14,17 +14,9 @@ namespace AdventOfCode2023.challenges
 
         public void Run()
         {
-            Console.WriteLine("Podaj ścieżkę do pliku wejściowego:");
-            string? filePath = Console.ReadLine();
+            string? filePath = @"C:\Users\KM\source\repos\AdventOfCode2023\inputs\day1Input.txt";
 
-            if (File.Exists(filePath))
-            {
-                ProcessFile(filePath);
-            }
-            else
-            {
-                Console.WriteLine($"Plik o ścieżce {filePath} nie istnieje.");
-            }
+            ProcessFile(filePath);
 
             Console.WriteLine("Naciśnij dowolny klawisz, aby zakończyć...");
             Console.ReadKey();
@@ -32,50 +24,43 @@ namespace AdventOfCode2023.challenges
 
         void ProcessFile(string filePath)
         {
-            try
+            int sumOfCalibrationValues = 0;
+            using (StreamReader reader = new StreamReader(filePath))
             {
-                int sumOfCalibrationValues = 0;
-                using (StreamReader reader = new StreamReader(filePath))
-                {
-                    string? line;
+                string? line;
                     
 
-                    while ((line = reader.ReadLine()) != null)
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var firstDigit = "";
+                    var lastDigit = "";
+                    var pos = 1;
+
+                    while(firstDigit == "")
                     {
-                        var firstDigit = "";
-                        var lastDigit = "";
-                        var pos = 1;
-
-                        while(firstDigit == "")
-                        {
-                            var linePart = line.Substring(0, pos);
-                            if (part == PartEnum.Day1Part2) linePart = ConvertTextNumbersToDigits(linePart);
-                            linePart = ExtractDigits(linePart);
-                            if (linePart != "") firstDigit = linePart;
-                            pos++;
-                        }
-
-                        pos = 1;
-                        while (lastDigit == "")
-                        {
-                            var linePart = line.Substring(line.Length - pos, pos);
-                            if (part == PartEnum.Day1Part2) linePart = ConvertTextNumbersToDigits(linePart);
-                            linePart = ExtractDigits(linePart);
-                            if (linePart != "") lastDigit = linePart;
-                            pos++;
-                        }
-
-                        var digitsOnly = ExtractDigits(line);
-                        sumOfCalibrationValues += int.Parse($"{firstDigit}{lastDigit}");
+                        var linePart = line.Substring(0, pos);
+                        if (part == PartEnum.Day1Part2) linePart = ConvertTextNumbersToDigits(linePart);
+                        linePart = ExtractDigits(linePart);
+                        if (linePart != "") firstDigit = linePart;
+                        pos++;
                     }
-                }
 
-                Console.WriteLine($"Calibration values sum: {sumOfCalibrationValues}");
+                    pos = 1;
+                    while (lastDigit == "")
+                    {
+                        var linePart = line.Substring(line.Length - pos, pos);
+                        if (part == PartEnum.Day1Part2) linePart = ConvertTextNumbersToDigits(linePart);
+                        linePart = ExtractDigits(linePart);
+                        if (linePart != "") lastDigit = linePart;
+                        pos++;
+                    }
+
+                    var digitsOnly = ExtractDigits(line);
+                    sumOfCalibrationValues += int.Parse($"{firstDigit}{lastDigit}");
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Wystąpił błąd: {ex.Message}");
-            }
+
+            Console.WriteLine($"Calibration values sum: {sumOfCalibrationValues}");
         }
 
         string ExtractDigits(string input)
