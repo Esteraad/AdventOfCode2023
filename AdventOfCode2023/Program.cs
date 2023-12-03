@@ -7,8 +7,8 @@ namespace AdventOfCode2023
     {
         static void Main(string[] args)
         {
-            var day2 = new Day2(PartEnum.Day2Part1);
-            day2.Run();
+            var day = new Day3();
+            day.Run();
         }
     }
 }
